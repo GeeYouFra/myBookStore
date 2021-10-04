@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.Bookstore.domain.Book;
 import com.example.Bookstore.domain.BookRepository;
 import com.example.Bookstore.domain.CategoryRepository;
-
 
 @Controller
 public class BookController {
@@ -55,6 +55,7 @@ public class BookController {
 	}
 
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('ADMIN')")
 	public String deleteStudent(@PathVariable("id") Long bookId, Model model) {
 		repository.deleteById(bookId);
 		// TWO DOTS MEAN THAT NOW NEEDS TO GO ONE LEVEL UP IN
@@ -63,9 +64,15 @@ public class BookController {
 	}
 
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('ADMIN')")
 	public String editBook(@PathVariable("id") Long bookId, Model model) {
 		model.addAttribute("book", repository.findById(bookId));
 		model.addAttribute("categories", catrepository.findAll());
 		return "modifybook";
+	}
+
+	@RequestMapping(value = "/login")
+	public String login() {
+		return "login";
 	}
 }
