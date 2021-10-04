@@ -54,8 +54,9 @@ public class BookController {
 		return "redirect:booklist";
 	}
 
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-	@PreAuthorize("hasRole('ADMIN')")
+
 	public String deleteStudent(@PathVariable("id") Long bookId, Model model) {
 		repository.deleteById(bookId);
 		// TWO DOTS MEAN THAT NOW NEEDS TO GO ONE LEVEL UP IN
@@ -63,8 +64,9 @@ public class BookController {
 		return "redirect:../booklist";
 	}
 
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-	@PreAuthorize("hasRole('ADMIN')")
+
 	public String editBook(@PathVariable("id") Long bookId, Model model) {
 		model.addAttribute("book", repository.findById(bookId));
 		model.addAttribute("categories", catrepository.findAll());
